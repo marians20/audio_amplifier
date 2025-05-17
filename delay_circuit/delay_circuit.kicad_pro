@@ -450,7 +450,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "power_source.kicad_pro",
+    "filename": "delay_circuit.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -460,32 +460,18 @@
         "clearance": 0.2,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
-        "diff_pair_width": 1.2,
+        "diff_pair_width": 0.2,
         "line_style": 0,
-        "microvia_diameter": 1.0,
-        "microvia_drill": 0.8,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 1.5,
-        "via_diameter": 1.5,
+        "track_width": 1.75,
+        "via_diameter": 2.5,
         "via_drill": 0.8,
         "wire_width": 6
-      },
-      {
-        "clearance": 0.2,
-        "diff_pair_gap": 0.5,
-        "diff_pair_width": 1.5,
-        "microvia_diameter": 1.0,
-        "microvia_drill": 0.8,
-        "name": "Power",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 1.5,
-        "via_diameter": 1.0,
-        "via_drill": 1.0
       }
     ],
     "meta": {
@@ -616,7 +602,7 @@
         "version": 0
       },
       "model_mode": 4,
-      "workbook_filename": ""
+      "workbook_filename": "delay_circuit.wbk"
     },
     "page_layout_descr_file": "",
     "plot_directory": "",
@@ -632,7 +618,7 @@
   },
   "sheets": [
     [
-      "f3f74aa7-dd17-46e0-abc5-52a176749c16",
+      "6cfd9bb4-f1a0-4251-8e2c-45a42268d192",
       "Root"
     ]
   ],

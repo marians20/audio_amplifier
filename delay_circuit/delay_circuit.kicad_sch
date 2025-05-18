@@ -4198,7 +4198,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-3P-3_Vertical"
+		(property "Footprint" "Package_TO_SOT_THT:TO-126-3_Vertical"
 			(at 172.72 109.22 0)
 			(effects
 				(font

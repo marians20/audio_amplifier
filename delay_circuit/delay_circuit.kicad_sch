@@ -4351,8 +4351,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x02_Pin")
-		(at 68.58 107.95 0)
-		(mirror y)
+		(at 68.58 110.49 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4360,7 +4359,7 @@
 		(dnp no)
 		(uuid "248d87c6-ecff-473d-a213-ae7f0187ffe0")
 		(property "Reference" "J5"
-			(at 66.294 105.156 0)
+			(at 66.294 113.284 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4369,7 +4368,7 @@
 			)
 		)
 		(property "Value" "OUT 5V CC"
-			(at 66.294 113.792 0)
+			(at 66.294 104.648 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4378,7 +4377,7 @@
 			)
 		)
 		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-			(at 68.58 107.95 0)
+			(at 68.58 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4387,7 +4386,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 68.58 107.95 0)
+			(at 68.58 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4396,7 +4395,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 68.58 107.95 0)
+			(at 68.58 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4411,7 +4410,7 @@
 			(uuid "0f489302-4a41-499f-92d1-5492c7d1386e")
 		)
 		(instances
-			(project ""
+			(project "delay_circuit"
 				(path "/6cfd9bb4-f1a0-4251-8e2c-45a42268d192"
 					(reference "J5")
 					(unit 1)

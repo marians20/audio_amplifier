@@ -251,21 +251,21 @@
 		(remove_unused_layers no)
 		(uuid "a5cbcb97-005c-4f84-972f-c9e515922060")
 	)
-	(pad "2" thru_hole rect
-		(at 0 0)
-		(size 1.71 1.8)
-		(drill 1)
-		(layers "*.Cu" "*.Mask")
-		(remove_unused_layers no)
-		(uuid "adba7032-e157-4e5b-b2a2-840bea247745")
-	)
-	(pad "3" thru_hole oval
+	(pad "2" thru_hole oval
 		(at 4.56 0)
 		(size 1.71 1.8)
 		(drill 1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(uuid "8ce5d2fa-d078-4122-a662-7b235b6f76ed")
+	)
+	(pad "3" thru_hole rect
+		(at 0 0)
+		(size 1.71 1.8)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "adba7032-e157-4e5b-b2a2-840bea247745")
 	)
 	(embedded_fonts no)
 	(model "${KICAD9_3DMODEL_DIR}/Package_TO_SOT_THT.3dshapes/TO-126-3_Vertical.wrl"

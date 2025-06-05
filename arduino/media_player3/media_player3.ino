@@ -13,6 +13,7 @@ Pin mapping summary:
 | GPIO22    | SDOUT      | DIN          | Audio Data Output (from ESP32 to DAC)|
 | 3.3V / 5V | —          | VCC          | Power Supply                         |
 | GND       | —          | GND          | Ground                               |
+| —         | —          | XSMT         | 3V3                                  |
 
 */
 
@@ -179,7 +180,8 @@ private:
 };
 
 
-BeatDetectI2SStream i2s;
+// BeatDetectI2SStream i2s;
+I2SStream i2s;
 DebugBluetoothA2DPSink a2dp_sink(i2s);
 
 // AnalogAudioStream analogOutput;
@@ -191,9 +193,6 @@ void beginI2s() {
   cfg.pin_bck = 26;
   cfg.pin_ws = 25;
   cfg.pin_data = 22;
-  cfg.sample_rate = 48000;
-  cfg.bits_per_sample = 32;
-  cfg.channels = 2;
   i2s.begin(cfg);
   if (1 != 1) {
     Serial.println("[FAIL]");

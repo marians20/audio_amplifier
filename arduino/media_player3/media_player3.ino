@@ -1,26 +1,32 @@
+/*
+
+  https://github.com/pschatzmann/ESP32-A2DP
+  https://github.com/pschatzmann/arduino-audio-tools
+
+
+Pin mapping summary:
+
+| ESP32 Pin | I2S Signal | PCM5102A Pin | Description                          |
+|-----------|------------|--------------|--------------------------------------|
+| GPIO26    | BCK        | BCK          | Bit Clock                            |
+| GPIO25    | WS         | LRCK         | Word Select (Left/Right Clock)       |
+| GPIO22    | SDOUT      | DIN          | Audio Data Output (from ESP32 to DAC)|
+| 3.3V / 5V | —          | VCC          | Power Supply                         |
+| GND       | —          | GND          | Ground                               |
+
+*/
+
 #include <AudioTools.h>
 #include <BluetoothA2DPSink.h>
 
 class SampleSummary {
 public:
-  uint32_t leftSum = 0;
-  uint32_t rightSum = 0;
+  uint32_t left = 0;
+  uint32_t right = 0;
   size_t count = 0;
 
-  uint32_t sum() {
-    return leftSum + rightSum;
-  }
-
-  float average() {
-    return (float)sum() / (2 * count);
-  }
-
-  float leftAverage() {
-    return (float) leftSum / count;
-  }
-
-  float rightAverage() {
-    return (float) rightSum / count;
+  uint32_t average() {
+    return (left + right) / 2;
   }
 };
 
@@ -29,10 +35,15 @@ public:
   SampleSummary getSampleSummary(const uint8_t* data, size_t len) {
     SampleSummary result;
     result.count = len / 2;
+    int16_t *values = (int16_t *)data;
+
     for (int j = 0; j < len / 2; j += 2) {
-      result.leftSum += abs(data[j]);
-      result.rightSum += abs(data[j + 1]);
+      result.left += abs(values[j]);
+      result.right += abs(values[j + 1]);
     }
+
+    result.left /= len;
+    result.right /= len;
 
     return result;
   }
@@ -98,6 +109,8 @@ public:
 
     SampleSummary sampleSummary = sampleSummaryCalculator.getSampleSummary(data, len);
 
+    Serial.printf("L:%d R: %d, Avg: %d\n", sampleSummary.left, sampleSummary.right, sampleSummary.average());
+
     if (detector.detect(sampleSummary)) {
       digitalWrite(ledPin, HIGH);
       ledOnTime = millis();
@@ -109,22 +122,71 @@ public:
       digitalWrite(ledPin, LOW);
       ledState = false;
     }
-    
+
     return written;
+  }
+};
+
+class DebugBluetoothA2DPSink : public BluetoothA2DPSink {
+public:
+  DebugBluetoothA2DPSink(audio_tools::AudioStream &output) : BluetoothA2DPSink(output) {
+  }
+
+  void start(const char *name, bool auto_reconect) override {
+    set_avrc_rn_playstatus_callback(avrc_rn_playstatus_callback);
+    set_avrc_rn_play_pos_callback(avrc_rn_play_pos_callback);
+    BluetoothA2DPSink::start(name, auto_reconect);
+  }
+private:
+  static void avrc_rn_play_pos_callback(uint32_t play_pos) {
+    Serial.printf("Play position is %d (%d seconds)\n", play_pos, (int)round(play_pos / 1000.0));
+  }
+
+  static void avrc_rn_playstatus_callback(esp_avrc_playback_stat_t playback) {
+    switch (playback) {
+      case esp_avrc_playback_stat_t::ESP_AVRC_PLAYBACK_STOPPED:
+        Serial.println("Stopped.");
+        break;
+      case esp_avrc_playback_stat_t::ESP_AVRC_PLAYBACK_PLAYING:
+        Serial.println("Playing.");
+        break;
+      case esp_avrc_playback_stat_t::ESP_AVRC_PLAYBACK_PAUSED:
+        Serial.println("Paused.");
+        break;
+      case esp_avrc_playback_stat_t::ESP_AVRC_PLAYBACK_FWD_SEEK:
+        Serial.println("Forward seek.");
+        break;
+      case esp_avrc_playback_stat_t::ESP_AVRC_PLAYBACK_REV_SEEK:
+        Serial.println("Reverse seek.");
+        break;
+      case esp_avrc_playback_stat_t::ESP_AVRC_PLAYBACK_ERROR:
+        Serial.println("Error.");
+        break;
+      default:
+        Serial.printf("Got unknown playback status %d\n", playback);
+    }
+  }
+
+  static void avrc_rn_track_change_callback(uint8_t* id) {
+    Serial.println("Track Change bits:");
+    for (uint8_t i = 0; i < 8; i++) {
+      Serial.printf("\tByte %d : 0x%x \n", i, id[i]);
+    }
+    //An example of how to project the pointer value directly as a uint8_t
+    uint8_t track_change_flag = *id;
+    Serial.printf("\tFlag value: %d\n", track_change_flag);
   }
 };
 
 
 BeatDetectI2SStream i2s;
-BluetoothA2DPSink a2dp_sink(i2s);
+DebugBluetoothA2DPSink a2dp_sink(i2s);
 
 // AnalogAudioStream analogOutput;
 // BluetoothA2DPSink a2dp_sink(analogOutput);
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("Starting Bluetooth A2DP Sink with Beat Detection...");
-
+void beginI2s() {
+  Serial.printf("Initializing I2S...");
   auto cfg = i2s.defaultConfig();
   cfg.pin_bck = 26;
   cfg.pin_ws = 25;
@@ -132,10 +194,22 @@ void setup() {
   cfg.sample_rate = 48000;
   cfg.bits_per_sample = 32;
   cfg.channels = 2;
-
   i2s.begin(cfg);
+  if (1 != 1) {
+    Serial.println("[FAIL]");
+    while (1)
+      ;
+  } else {
+    Serial.println("[ OK ]");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Starting Bluetooth A2DP Sink with Beat Detection...");
+  beginI2s();
   // analogOutput.begin();
-  a2dp_sink.start("ESP32-BT-Audio");
+  a2dp_sink.start("ESP32-BT-Audio", true);
 }
 
 void loop() {

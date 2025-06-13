@@ -19,6 +19,18 @@ Pin mapping summary:
 
 #include <AudioTools.h>
 #include <BluetoothA2DPSink.h>
+#include "vumeter.h"
+
+
+// Vumeter parameters
+#define PIN 0
+
+// How many NeoPixels are attached to the Arduino?
+#define NUMPIXELS 8
+
+// Luminosity from 0 to 255
+#define Luminosity 16
+#define BeatLuminosity 128
 
 class SampleSummary {
 public:
@@ -94,10 +106,16 @@ class BeatDetectI2SStream : public I2SStream {
 public:
   BeatDetector detector;
   SampleSummaryCalculator sampleSummaryCalculator;
+  Vumeter *vumeter;
 
   int ledPin = 2;
   unsigned long ledOnTime = 0;
   bool ledState = false;
+
+  BeatDetectI2SStream() {
+    I2SStream();
+    vumeter = new Vumeter(NUMPIXELS, PIN, Luminosity);
+  }
 
   void begin(I2SConfig cfg) {
     pinMode(ledPin, OUTPUT);
@@ -109,9 +127,7 @@ public:
     size_t written = I2SStream::write(data, len);
 
     SampleSummary sampleSummary = sampleSummaryCalculator.getSampleSummary(data, len);
-
-    Serial.printf("L:%d R: %d, Avg: %d\n", sampleSummary.left, sampleSummary.right, sampleSummary.average());
-
+    vumeter->show(sampleSummary.left, sampleSummary.right);
     if (detector.detect(sampleSummary)) {
       digitalWrite(ledPin, HIGH);
       ledOnTime = millis();
@@ -180,8 +196,8 @@ private:
 };
 
 
-// BeatDetectI2SStream i2s;
-I2SStream i2s;
+BeatDetectI2SStream i2s;
+// I2SStream i2s;
 DebugBluetoothA2DPSink a2dp_sink(i2s);
 
 // AnalogAudioStream analogOutput;

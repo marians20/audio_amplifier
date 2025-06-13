@@ -26,7 +26,7 @@ Pin mapping summary:
 #define PIN 0
 
 // How many NeoPixels are attached to the Arduino?
-#define NUMPIXELS 8
+#define NUMPIXELS 16
 
 // Luminosity from 0 to 255
 #define Luminosity 16

@@ -23,14 +23,6 @@ void Utils::parseCommaSeparatedValues(const char* input, uint16_t maxSize, uint1
     free(strCopy); // Free the duplicated string
 }
 
-uint16_t Utils::scale(uint16_t value, uint16_t maxInputValue, uint16_t maxOutputValue) {
-    if(value <= 0) {
-        return value;
-    }
-
-    return maxInputValue == 0 ? 0 : Utils::limit((double)value * maxOutputValue / maxInputValue, maxOutputValue);
-}
-
 // double Utils::limit(double value, double maxValue) {
 //     return value <= maxValue ? value : maxValue;
 // }

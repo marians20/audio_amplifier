@@ -23,7 +23,7 @@ private:
   double _oldRight = 0;
   double _absoluteMaxValue = 0;
   double _maxValue = 0;
-  double valueFallSpeed = -0.5;
+  double valueFallSpeed = -0.05;
 };
 
 #endif

@@ -12,6 +12,7 @@ class Utils {
     static void parseCommaSeparatedValues(const char* input, uint16_t maxSize, uint16_t& size, uint16_t* output);
     template <typename T1, typename T2, typename T3> static T1 scale(T1 value, T2 maxInputValue, T3 maxOutputValue);
     template <typename T1, typename T2> static T1 limit(T1 value, T2 maxValue);
+    template <typename T1, typename T2> static T1 limit(T1 value, T2 minValue, T2 maxValue);
     static double limitFallingSpeed(double value, double initialValue, unsigned long deltaT, double maxFallingSpeed);
 };
 
@@ -24,6 +25,14 @@ template <typename T1, typename T2, typename T3> T1 Utils::scale(T1 value, T2 ma
 }
 
 template <typename T1, typename T2> T1 Utils::limit(T1 value, T2 maxValue) {
+    return value <= maxValue ? value : maxValue;
+}
+
+template <typename T1, typename T2> T1 Utils::limit(T1 value, T2 minValue, T2 maxValue) {
+    if(value < minValue) {
+        return minValue;
+    }
+
     return value <= maxValue ? value : maxValue;
 }
 

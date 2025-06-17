@@ -32,14 +32,14 @@ uint32_t Vumeter::getColor(uint16_t r, uint16_t g, uint16_t b, uint16_t luminosi
 
 uint32_t Vumeter::getLedColor(uint16_t column, uint16_t luminosity) {
   if (column < ledsPerBar / 2) {
-    return this->getColor(0, 255, 128, luminosity);
+    return this->getColor(0, 255, 0, luminosity);
   }
 
   if (column < 3 * ledsPerBar / 4) {
     return this->getColor(255, 200, 0, luminosity);
   }
 
-  return this->getColor(255, 0, 10, luminosity);
+  return this->getColor(255, 0, 0, luminosity);
 }
 
 uint32_t Vumeter::getPeakColor(uint16_t column) {

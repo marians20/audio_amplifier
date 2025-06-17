@@ -26,8 +26,10 @@ void Value::Parse(uint16_t left, uint16_t right) {
   _oldLeft = _left;
   _oldRight = _right;
   _absoluteMaxValue = MAX(_absoluteMaxValue, MAX(_left, _right));
-  _maxValue = Utils::limit((_maxValue * 0.95) + (MAX(_left, _right) * 0.05), _absoluteMaxValue);
+  // _maxValue = Utils::limit((_maxValue * 0.999) + (MAX(_left, _right) * 0.001), _absoluteMaxValue);
+  _maxValue = _absoluteMaxValue;
   sampleTime = millis();
+  // Serial.printf("Max: %f, Abds max: %f\n", _maxValue, _absoluteMaxValue);
   // Serial.printf("Left: %d / %f, Right: %d / %f, MaxValue: %f\n", left, _left, right, _right, _maxValue);
 }
 
